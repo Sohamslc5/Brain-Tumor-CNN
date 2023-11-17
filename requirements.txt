@@ -1,9 +1,5 @@
 Flask
-gevent
-keras
 opencv-python
 tensorflow
-urllib3
-Werkzeug
 numpy
 gunicorn
