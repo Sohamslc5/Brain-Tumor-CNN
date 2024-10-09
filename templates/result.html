@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Prediction Result</title>
+    <style>
+        /* Center the image */
+        #uploaded-image {
+            max-width: 300px; /* Fixed size */
+            max-height: 300px; /* Fixed size */
+            margin: 20px auto; /* Center the image */
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h1 class="mt-5">Brain Tumor Classification Result</h1>
+
+        <div class="mt-4">
+            <h3>Uploaded Image:</h3>
+            <img src="{{ url_for('uploaded_file', filename=filename) }}" id="uploaded-image" alt="Uploaded Image" class="img-fluid">
+        </div>
+
+        <div class="mt-4">
+            <h3>Prediction Result:</h3>
+            <p class="lead">{{ prediction }}</p>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">Upload Another Image</a>
+        </div>
+    </div>
+</body>
+</html>

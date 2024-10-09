@@ -1,31 +1,90 @@
-{% extends "base.html" %} {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Brain Tumor Classification</title>
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function() {
+                const imgElement = document.getElementById('image-preview');
+                imgElement.src = reader.result;
+                imgElement.style.display = 'block';  // Show the image
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+    <style>
+        /* Center the image preview */
+        #image-preview {
+            display: none;
+            max-width: 300px; /* Fixed width */
+            max-height: 300px; /* Fixed height */
+            margin: 20px auto; /* Center the image */
+            border: 1px solid #ccc; /* Optional border */
+            border-radius: 5px; /* Optional rounded corners */
+        }
 
-<h2>Image Classifier</h2>
+        /* Custom styles for the file input */
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px 15px;
+            cursor: pointer;
+            border: 1px solid #007bff;
+            color: #007bff;
+            border-radius: 5px;
+            background-color: white;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-<div>
-    <form id="upload-file" method="post" enctype="multipart/form-data">
-        <label for="imageUpload" class="upload-label">
-            Choose...
-        </label>
-        <input type="file" name="file" id="imageUpload" accept=".png, .jpg, .jpeg">
-    </form>
+        .custom-file-upload:hover {
+            background-color: #007bff;
+            color: white;
+        }
 
-    <div class="image-section" style="display:none;">
-        <div class="img-preview">
-            <div id="imagePreview">
-            </div>
+        .file-input {
+            display: none; /* Hide the default file input */
+        }
+
+        /* Center the button */
+        .btn-classify {
+            display: block;
+            margin: 20px auto; /* Center the button */
+            width: 200px; /* Optional fixed width */
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h1 class="mt-5">Brain Tumor Classification</h1>
+        <p class="lead">Upload an MRI image for classification.</p>
+        
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <label class="custom-file-upload">
+                <input type="file" name="file" accept="image/*" class="file-input" required onchange="previewImage(event)">
+                Choose File
+            </label>
+            <img id="image-preview" alt="Image Preview"/>
+            <button type="submit" class="btn btn-primary btn-classify">Classify</button>
+        </form>
+
+        <div class="mt-4">
+            {% if filename %}
+            <h3>Uploaded Image:</h3>
+            <img src="{{ url_for('uploaded_file', filename=filename) }}" id="uploaded-image" class="img-fluid" alt="Uploaded Image" style="max-width: 300px; max-height: 300px; display: block; margin: 0 auto;">
+            {% endif %}
         </div>
-        <div>
-            <button type="button" class="btn btn-primary btn-lg " id="btn-predict">Predict!</button>
+
+        <div class="mt-4">
+            {% if prediction %}
+            <h3>Prediction Result:</h3>
+            <p class="lead">{{ prediction }}</p>
+            {% endif %}
         </div>
     </div>
-
-    <div class="loader" style="display:none;"></div>
-
-    <h3 id="result">
-        <span> </span>
-    </h3>
-
-</div>
-
-{% endblock %}
+</body>
+</html>
